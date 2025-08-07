@@ -3,13 +3,21 @@ import pandas as pd
 import logging
 import math
 import random
+import os
 from decimal import Decimal, getcontext, ROUND_CEILING, ROUND_HALF_EVEN
 
 getcontext().prec = 10
 
 # --- Configuration ---
 # It is recommended to load the API key from a secure configuration file or environment variable.
-  # Your Warcraft Logs API v1 key.
+try:
+    from .config import WCL_API_KEY
+except ImportError:
+    WCL_API_KEY = os.environ.get("WCL_API_KEY")
+
+if not WCL_API_KEY:
+    raise ValueError("WCL_API_KEY not found. Please set it in config.py or as an environment variable.")
+
 WCL_V1_API_URL = "https://www.warcraftlogs.com:443/v1"  # Base URL for the WCL API v1.
 
 # --- Constants ---
