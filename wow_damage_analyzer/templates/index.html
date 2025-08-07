@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">WoW Warrior Attribute Analyzer</title>
+    <link rel="icon" href="https://wow.zamimg.com/images/wow/icons/large/classicon_warrior.jpg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button id="lang-toggle" data-i18n="lang_btn">中文</button>
+            <h1 data-i18n="header_title">WoW Warrior Attribute Analyzer</h1>
+            <div class="wcl-url-container">
+                <input type="text" id="wcl-url" data-i18n-placeholder="wcl_placeholder" placeholder="Enter WCL Report URL or select from history">
+                <select id="wcl-history-select">
+                    <option value="" data-i18n="select_history_option">Select from history</option>
+                </select>
+            </div>
+        </header>
+        <main>
+            <div class="sidebar">
+                <div class="config-section">
+                    <div class="config-section">
+                        <h3 data-i18n="fight_title">Fight</h3>
+                        <select id="fight-select">
+                            <option value="" data-i18n="select_fight_option">Select a fight</option>
+                        </select>
+                    </div>
+                    <div class="config-section">
+                        <h3 data-i18n="player_title">Player (Warrior)</h3>
+                        <select id="player-select">
+                            <option value="" data-i18n="select_player_option">Select a player</option>
+                        </select>
+                    </div>
+                    <div class="weapons">
+                        <h3 data-i18n="current_status_title">Current Status</h3>
+                        <div class="attr-row">
+                            <div class="attr-group">
+                                <label for="current-hit" data-i18n="current_hit_rate_label">Current Hit %</label>
+                                <input type="number" id="current-hit" step="0.01" value="0">
+                            </div>
+                            <div class="attr-group">
+                                <label for="current-crit" data-i18n="current_crit_rate_status_label">Current Crit %</label>
+                                <input type="number" id="current-crit" step="0.01" value="0">
+                            </div>
+                        </div>
+                        <div class="attr-row">
+                            <div class="attr-group">
+                                <label for="mh-skill" data-i18n="mh_skill_label">MH Skill</label>
+                                <input type="number" id="mh-skill" value="300">
+                            </div>
+                            <div class="attr-group">
+                                <label for="oh-skill" data-i18n="oh_skill_label">OH Skill</label>
+                                <input type="number" id="oh-skill" value="300">
+                            </div>
+                        </div>
+                        <div class="attr-row">
+                            <div class="attr-group">
+                                <label for="mh-speed" data-i18n="mh_speed_label">MH Speed</label>
+                                <input type="number" id="mh-speed" step="0.1" value="2.4">
+                            </div>
+                            <div class="attr-group">
+                                <label for="oh-speed" data-i18n="oh_speed_label">OH Speed</label>
+                                <input type="number" id="oh-speed" step="0.1" value="1.8">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="attributes">
+                        <h3 data-i18n="attribute_changes_title">Attribute Changes</h3>
+                        <div class="attr-row">
+                            <div class="attr-group">
+                                <label for="strength" data-i18n="strength_label">Strength</label>
+                                <input type="number" id="strength" value="0">
+                            </div>
+                            <div class="attr-group">
+                                <label for="agility" data-i18n="agility_label">Agility</label>
+                                <input type="number" id="agility" value="0">
+                            </div>
+                        </div>
+                        <div class="attr-row">
+                            <div class="attr-group">
+                                <label for="attack-power" data-i18n="attack_power_label">Attack Power</label>
+                                <input type="number" id="attack-power" value="0">
+                            </div>
+                            <div class="attr-group">
+                                <label for="haste" data-i18n="haste_label">Haste (%)</label>
+                                <input type="number" id="haste" step="0.01" value="0">
+                            </div>
+                        </div>
+                        <div class="attr-row">
+                            <div class="attr-group">
+                                <label for="crit" data-i18n="crit_label">Crit (%)</label>
+                                <input type="number" id="crit" step="0.01" value="0">
+                            </div>
+                            <div class="attr-group">
+                                <label for="hit" data-i18n="hit_label">Hit (%)</label>
+                                <input type="number" id="hit" step="0.01" value="0">
+                            </div>
+                        </div>
+                        <div class="attr-row">
+                            <div class="attr-group">
+                                <label for="mh-skill-change" data-i18n="mh_skill_change_label">MH Skill</label>
+                                <input type="number" id="mh-skill-change" value="0">
+                            </div>
+                            <div class="attr-group">
+                                <label for="oh-skill-change" data-i18n="oh_skill_change_label">OH Skill</label>
+                                <input type="number" id="oh-skill-change" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <button id="analyze-btn" data-i18n="analyze_btn">Analyze</button>
+                    <div id="last-analyzed-container">
+                        <span data-i18n="last_analyzed_label">Last Analyzed:</span>
+                        <span id="last-analyzed-time"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="damage-table-container">
+                    <h2 data-i18n="damage_breakdown_title">Damage Breakdown</h2>
+                    <table id="damage-table">
+                        <thead>
+                            <tr>
+                                <th class="col-ability" data-i18n="ability_header">Ability</th>
+                                <th class="col-damage" data-i18n="damage_header">Damage</th>
+                                <th class="col-percent" data-i18n="percent_header">% of Total</th>
+                                <th class="col-casts" data-i18n="casts_header">Casts</th>
+                                <th class="col-hits" data-i18n="hits_header">Hits</th>
+                                <th class="col-crits" data-i18n="crits_header">Crits</th>
+                                <th class="col-crit-rate" data-i18n="crit_rate_header">Crit %</th>
+                                <th class="col-misses" data-i18n="misses_header">Miss</th>
+                                <th class="col-dodge" data-i18n="dodge_header">Dodge</th>
+                                <th class="col-parry" data-i18n="parry_header">Parry</th>
+                                <th class="col-miss-rate" data-i18n="miss_rate_header">Miss %</th>
+                                <th class="col-dps" data-i18n="dps_header">DPS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="charts-container">
+                    <h2 data-i18n="scaling_title">Attribute Scaling</h2>
+                    <div class="chart-row">
+                        <div id="ap-chart-container" class="chart-wrapper clickable">
+                            <canvas id="ap-dps-chart"></canvas>
+                        </div>
+                        <div id="skill-chart-container" class="chart-wrapper clickable">
+                            <canvas id="skill-dps-chart"></canvas>
+                        </div>
+                        <div id="crit-hit-chart-container" class="chart-wrapper clickable">
+                            <canvas id="crit-hit-dps-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="dps-stack-container">
+                    <h2 data-i18n="dps_stack_title">DPS Simulation Stack</h2>
+                    <div id="dps-stack-chart-container" class="chart-wrapper clickable">
+                        <canvas id="dps-stack-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 data-i18n="dps_gain_details_title">DPS Gain Details</h2>
+            <div class="modal-table-container">
+                <table id="details-table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
