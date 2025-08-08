@@ -1268,6 +1268,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 label: translateAbilityName(ability, currentLang),
                 data: abilityData,
                 backgroundColor: getHarmoniousColors()[index % getHarmoniousColors().length],
+                borderWidth: 0,
+                borderSkipped: false,
             };
         });
     
@@ -1290,6 +1292,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 datasets: datasets
             },
             options: {
+                devicePixelRatio: 1, // Final attempt to fix sub-pixel rendering issue
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
@@ -1311,8 +1314,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         grid: { color: '#444' }
                     }
                 },
-                barPercentage: 0.9,
-                categoryPercentage: 0.8,
                 plugins: {
                     legend: {
                         display: true,

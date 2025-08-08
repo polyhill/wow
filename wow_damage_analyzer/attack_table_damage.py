@@ -145,11 +145,11 @@ class AttackTableDamageCalculator:
         glance_rate = self.MELEE_GLANCE_RATE
         panel_hit_rate = self.current_hit + (Decimal(attributes.get('hit', 0)) / Decimal('100'))
         panel_crit_rate = self.current_crit + (Decimal(attributes.get('crit', 0)) / Decimal('100'))
-        
-        boss_main_crit_rate = panel_crit_rate - Decimal('0.03') - max(Decimal('0'), (Decimal('315') - main_weapon_skill) * Decimal('0.0004'))
-        boss_off_crit_rate = panel_crit_rate - Decimal('0.03') - max(Decimal('0'), (Decimal('315') - off_weapon_skill) * Decimal('0.0004'))        
-        current_boss_main_crit_rate = self.current_crit - Decimal('0.03') - max(Decimal('0'), (Decimal('315') - Decimal(self.mh_skill)) * Decimal('0.0004'))
-        current_boss_off_crit_rate = self.current_crit - Decimal('0.03') - max(Decimal('0'), (Decimal('315') - Decimal(self.oh_skill)) * Decimal('0.0004'))
+             
+        boss_main_crit_rate = panel_crit_rate - Decimal('0.048')
+        boss_off_crit_rate = panel_crit_rate - Decimal('0.048')
+        current_boss_main_crit_rate = self.current_crit - Decimal('0.048')
+        current_boss_off_crit_rate = self.current_crit - Decimal('0.048')
         
         ability_miss_rate = max(Decimal('0'), ((Decimal('0.09') - (main_weapon_skill - Decimal('300')) * Decimal('0.004')) if main_weapon_skill < 305 else (Decimal('0.06') - (main_weapon_skill - Decimal('305')) * Decimal('0.001'))) - panel_hit_rate)
         dual_main_miss_rate = max(Decimal('0'), Decimal('0.19') + ((Decimal('0.09') - (main_weapon_skill - Decimal('300')) * Decimal('0.004')) if main_weapon_skill < 305 else (Decimal('0.06') - (main_weapon_skill - Decimal('305')) * Decimal('0.001'))) - panel_hit_rate)

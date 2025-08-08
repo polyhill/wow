@@ -14,6 +14,7 @@ EMPTY_ATTRIBUTES = {
     "attackPower": 0,
     "crit": 0,
     "hit": 0,
+    "haste": 0,
     "mainHandSkill": 0,
     "offHandSkill": 0
 }
