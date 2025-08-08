@@ -414,6 +414,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('oh-speed').value = status.oh_speed;
             document.getElementById('current-hit').value = status.current_hit;
             document.getElementById('current-crit').value = status.current_crit;
+        } else {
+            // Set default values for first-time users
+            document.getElementById('mh-skill').value = 300;
+            document.getElementById('oh-skill').value = 300;
+            document.getElementById('current-hit').value = 9;
+            document.getElementById('current-crit').value = 40;
         }
     }
 
@@ -580,13 +586,20 @@ document.addEventListener('DOMContentLoaded', async () => {
      * @returns {object} An object containing the current player status.
      */
     function getCurrentStatus() {
+        const mh_skill = parseInt(document.getElementById('mh-skill').value);
+        const oh_skill = parseInt(document.getElementById('oh-skill').value);
+        const hit = parseFloat(document.getElementById('current-hit').value);
+        const crit = parseFloat(document.getElementById('current-crit').value);
+        const main_hand_speed = parseFloat(document.getElementById('mh-speed').value);
+        const off_hand_speed = parseFloat(document.getElementById('oh-speed').value);
+
         return {
-            mh_skill: parseInt(document.getElementById('mh-skill').value) || 300,
-            oh_skill: parseInt(document.getElementById('oh-skill').value) || 300,
-            hit: parseFloat(document.getElementById('current-hit').value) || 0,
-            crit: parseFloat(document.getElementById('current-crit').value) || 0,
-            main_hand_speed: parseFloat(document.getElementById('mh-speed').value) || 0,
-            off_hand_speed: parseFloat(document.getElementById('oh-speed').value) || 0
+            mh_skill: (mh_skill && mh_skill > 0) ? mh_skill : 300,
+            oh_skill: (oh_skill && oh_skill > 0) ? oh_skill : 300,
+            hit: (hit && hit > 0) ? hit : 9,
+            crit: (crit && crit > 0) ? crit : 40,
+            main_hand_speed: (main_hand_speed && main_hand_speed > 0) ? main_hand_speed : 0,
+            off_hand_speed: (off_hand_speed && off_hand_speed > 0) ? off_hand_speed : 0
         };
     }
 
